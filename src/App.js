@@ -12,6 +12,7 @@ function App() {
   return (
     <div className="App">
       <form>
+        <button id="reset">RESET</button>
         <input type="text" placeholder="Write to do" />
         <button>Add</button>
       </form>

@@ -3,6 +3,7 @@ import { createStore } from "redux";
 const form = document.querySelector("form");
 const input = document.querySelector("input");
 const ul = document.querySelector("ul");
+const resetBTN = document.getElementById("reset");
 
 const ADD_TODO = "ADD_TODO";
 const DELETE_TODO = "DELETE_TODO";
@@ -21,6 +22,13 @@ const deleteTodo = (id) => {
     id,
   };
 };
+
+const resetTodo = () => {
+  return {
+    type: RESET_TODO,
+  };
+};
+
 const reducer = (state = [], action) => {
   console.log(state, action);
   switch (action.type) {
@@ -28,6 +36,8 @@ const reducer = (state = [], action) => {
       return [{ text: action.text, id: Date.now() }, ...state];
     case DELETE_TODO:
       return state.filter((toDos) => toDos.id !== action.id);
+    case RESET_TODO:
+      return (state = []);
     default:
       return state;
   }
@@ -41,8 +51,11 @@ const dispatchAddToDo = (text) => {
 };
 const dispatchDeleteToDo = (e) => {
   const id = parseInt(e.target.parentNode.id);
-  console.log(id);
   store.dispatch(deleteTodo(id));
+};
+
+const dispatchResetToDo = () => {
+  store.dispatch(resetTodo());
 };
 
 // submit시 불러오는 함수
@@ -52,6 +65,11 @@ const onSubmit = (e) => {
   const toDo = input.value;
   input.value = "";
   dispatchAddToDo(toDo);
+};
+
+const handleRESET = (e) => {
+  e.preventDefault();
+  dispatchResetToDo();
 };
 
 const paintToDos = () => {
@@ -86,3 +104,5 @@ const paintToDos = () => {
 store.subscribe(paintToDos);
 
 form.addEventListener("submit", onSubmit);
+
+resetBTN.addEventListener("click", handleRESET);
